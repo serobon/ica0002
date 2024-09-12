@@ -1,2 +1,47 @@
-- name: Ansible ping module
-  ansible.builtin.ping:
+#- name: Ansible ping module
+#  ansible.builtin.ping:
+
+- name: Add the user 'roman'
+  ansible.builtin.user:
+    name: roman
+    state: present
+    shell: /bin/bash
+    create_home: yes
+
+- name: Set authorized keys for user 'roman'
+  ansible.posix.authorized_key:
+    user: roman
+    state: present
+    key: https://github.com/romankuchin.keys
+
+- name: Add the user 'juri'
+  ansible.builtin.user:
+    name: juri
+    state: present
+    shell: /bin/bash
+    create_home: yes
+
+- name: Set authorized keys for user 'juri'
+  ansible.posix.authorized_key:
+    user: juri
+    state: present
+    key: https://github.com/hudolejev.keys
+
+
+- name: Update APT cache
+  ansible.builtin.apt:
+    cache_valid_time: 86400
+
+
+
+
+
+
+
+
+
+
+
+
+
+
