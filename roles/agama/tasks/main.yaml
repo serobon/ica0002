@@ -8,6 +8,21 @@
 - name: Create directory '/opt/agama'
   ansible.builtin.file:
     path: /opt/agama
+    mode: '0755'
     owner: agama
     state: directory
-    mode: '0755'
+
+- name: Install AGAMA dependencies
+  ansible.builtin.apt:
+    name:
+      - python3
+      - python3-flask
+      - python3-flask-sqlalchemy
+      - sqlite3
+    state: present
+
+- name: Install 'agama.py' to '/opt/agama'
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/hudolejev/agama/master/agama.py
+    dest: /opt/agama/agama.py
+
