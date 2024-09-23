@@ -1,0 +1,13 @@
+- name: Add user 'agama'
+  ansible.builtin.user:
+    name: agama
+    state: present
+    shell: /bin/bash
+    create_home: yes
+
+- name: Create directory '/opt/agama'
+  ansible.builtin.file:
+    path: /opt/agama
+    owner: agama
+    state: directory
+    mode: '0755'
