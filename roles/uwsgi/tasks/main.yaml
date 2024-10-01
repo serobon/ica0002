@@ -5,11 +5,18 @@
       - uwsgi-plugin-python3
     state: present
 
+- name: Create uWSGI directory
+  ansible.builtin.file:
+    path: /etc/uwsgi/apps-enabled
+    state: directory
+
 - name: Create uWSGI config
-  ansible.builtin.copy:
+  ansible.builtin.template:
     dest: /etc/uwsgi/apps-enabled/agama.ini
-    src: agama.ini
+    src: agama.ini.j2
     owner: agama
+    mode: '0600'
+  no_log: true
   notify: Restart uwsgi
 
 - name: uWSGI service

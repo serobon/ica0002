@@ -3,6 +3,11 @@
     hosts: all
     roles:
       - init
+
+  - name: Database server
+    hosts: db_servers
+    roles: 
+      - mysql
   
   - name: Web server
     hosts: web_servers
