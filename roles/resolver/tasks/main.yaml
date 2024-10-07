@@ -1,0 +1,11 @@
+- name: Change resolv.conf
+  ansible.builtin.template:
+    dest: /etc/resolv.conf
+    src: resolv.conf.j2
+    mode: '0644'
+
+- name: Shutdown systemd-resolved
+  ansible.builtin.service:
+    name: systemd-resolved
+    state: stopped
+    enabled: false

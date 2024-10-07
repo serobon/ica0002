@@ -1,0 +1,11 @@
+$TTL	604800
+{{ domain_name }}.	IN	SOA	ns.{{ domain_name }}. mail.{{ domain_name }}. (
+			      2		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+{{ domain_name }}.	IN	NS	serobon-1
+serobon-1	IN	A	{{ hostvars['serobon-1']['ansible_default_ipv4']['address'] }}
+serobon-2	IN	A	{{ hostvars['serobon-2']['ansible_default_ipv4']['address'] }}

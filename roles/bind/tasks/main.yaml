@@ -1,0 +1,27 @@
+- name: Install bind9
+  ansible.builtin.apt:
+    name: bind9
+    state: present
+
+- name: Create bind9 config
+  ansible.builtin.template:
+    dest: /etc/bind/named.conf.{{ item }}
+    src: named.conf.{{ item }}.j2
+    mode: '0644'
+  loop:
+    - local
+    - options
+  notify: Restart bind9
+
+- name: Create database config
+  ansible.builtin.template:
+    dest: /var/cache/bind/db.{{ domain_name }}
+    src: db.{{ domain_name }}.j2
+    mode: '0644'
+  notify: Restart bind9
+
+- name: Startup on boot
+  ansible.builtin.service:
+    name: bind9
+    state: started
+    enabled: true

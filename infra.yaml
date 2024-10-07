@@ -3,6 +3,12 @@
     hosts: all
     roles:
       - init
+      - resolver
+
+  - name: DNS servers
+    hosts: dns_servers
+    roles:
+      - bind
 
   - name: Database server
     hosts: db_servers
