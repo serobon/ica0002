@@ -1,21 +1,31 @@
 ---
-  - name: Initial setup
+  - name: Initial_Setup
     hosts: all
     roles:
       - init
-      - resolver
 
-  - name: DNS servers
+  - name: DNS_Servers
     hosts: dns_servers
     roles:
       - bind
+      
+  - name: Resolver
+    hosts: all
+    roles:
+      - resolver
 
-  - name: Database server
+  - name: Prometheus
+    hosts: prometheus
+    roles:
+      - prometheus
+      - nginx
+
+  - name: Database_Server
     hosts: db_servers
     roles: 
       - mysql
   
-  - name: Web server
+  - name: Web_Server
     hosts: web_servers
     roles:
       - agama
