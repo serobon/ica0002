@@ -7,14 +7,15 @@ server {
 		uwsgi_pass localhost:5000;
 		include uwsgi_params;
 	}
+    {% elif inventory_hostname in groups['prometheus'] %}
+    location / {
+        return 403;
+    }
     {% endif %}
 
     {% if inventory_hostname in groups['prometheus'] %}
     location /prometheus {
         proxy_pass http://localhost:9090;
-    }
-    location / {
-        return 404;
     }
     {% endif %}
 }
