@@ -6,6 +6,9 @@ $TTL	604800
 			2419200		; Expire
 			 604800 )	; Negative Cache TTL
 ;
-{{ domain_name }}.	IN	NS	serobon-1
-serobon-1	IN	A	{{ hostvars['serobon-1']['ansible_default_ipv4']['address'] }}
-serobon-2	IN	A	{{ hostvars['serobon-2']['ansible_default_ipv4']['address'] }}
+{% for host in groups['dns_servers'] %}
+{{ domain_name }}. IN NS {{ host }}
+{% endfor %}
+{% for host in groups['all'] %}
+{{ host }} IN A {{ hostvars[host]['ansible_default_ipv4']['address'] }}
+{% endfor %}

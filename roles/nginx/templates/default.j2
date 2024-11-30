@@ -7,15 +7,31 @@ server {
 		uwsgi_pass localhost:5000;
 		include uwsgi_params;
 	}
-    {% elif inventory_hostname in groups['prometheus'] %}
+    {% endif %}
+
+    {% if inventory_hostname in groups['prometheus'] %}
     location / {
-        return 403;
-    }
+        return 404;
+    }                   
     {% endif %}
 
     {% if inventory_hostname in groups['prometheus'] %}
     location /prometheus {
-        proxy_pass http://localhost:9090;
+        proxy_pass http://{{ groups['prometheus'][0] }}:9090/prometheus;
     }
     {% endif %}
+
+    {% if inventory_hostname in groups['grafana'] %}
+    location /grafana {
+        proxy_set_header Host $http_host;
+        proxy_pass http://localhost:3000;
+    }
+    {% endif %}
+}
+
+server {
+    listen 8080 default_server;
+    location /stub_status {
+        stub_status;
+    }
 }

@@ -20,6 +20,11 @@
       - prometheus
       - nginx
 
+  - name: Grafana
+    hosts: grafana
+    roles:
+      - grafana
+      
   - name: Database_Server
     hosts: db_servers
     roles: 

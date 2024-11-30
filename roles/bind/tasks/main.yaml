@@ -1,7 +1,43 @@
-- name: Install bind9
+- name: Install bind9 and prometheus-bind-exporter
   ansible.builtin.apt:
-    name: bind9
+    name: 
+      - bind9
     state: present
+
+- name: Extract Bind9 exporter
+  ansible.builtin.unarchive:
+    src: https://github.com/prometheus-community/bind_exporter/releases/download/v0.7.0/bind_exporter-0.7.0.linux-amd64.tar.gz
+    dest: /opt
+    remote_src: yes
+    extra_opts: [ "--strip-components=1", "--wildcards", "--no-anchored", "bind_exporter" ]
+
+- name: Create symlink to Bind9 exporter executable
+  ansible.builtin.file:
+    src: /opt/bind_exporter
+    dest: /usr/local/bin/prometheus-bind-exporter
+    state: link
+
+- name: Create Bind9 exporter systemd service
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/bind_exporter.service
+    content: |
+      [Unit]
+      Description=Exporter for Bind9
+      Wants=network-online.target
+      After=network.target
+
+      [Service]
+      User=bind
+      Group=bind
+      Type=simple
+      ExecStart=/usr/local/bin/prometheus-bind-exporter
+      Restart=always
+
+      [Install]
+      WantedBy=multi-user.target
+  notify:
+    - Reload systemd
+    - Restart bind9-exporter
 
 - name: Create bind9 config
   ansible.builtin.template:
@@ -22,6 +58,8 @@
 
 - name: Startup on boot
   ansible.builtin.service:
-    name: bind9
+    name: "{{ item }}"
     state: started
     enabled: true
+  loop:
+    - bind9

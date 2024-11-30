@@ -1,18 +1,21 @@
-- name: Install nginx
+- name: Install nginx and prometheus-nginx-exporter
   ansible.builtin.apt:
     name: 
       - nginx
       - prometheus-nginx-exporter
     state: present
 
-- name: copy default config
+- name: Copy nginx config into default
   ansible.builtin.template:
     src: default.j2
     dest: /etc/nginx/sites-enabled/default
     mode: '0644'
   notify: 
     - Restart nginx 
-    - Restart prometheus exporter
+    - Restart nginx prometheus exporter
+
+- name: Flush handlers to apply configuration
+  ansible.builtin.meta: flush_handlers
 
 - name: Startup nginx and prometheus-nginx-exporter on boot
   ansible.builtin.service:
