@@ -14,8 +14,21 @@
     mode: '0644'
   notify: Restart rsyslog
 
+- name: Make user 'backup' with SSH
+  ansible.builtin.user:
+    name: backup
+    state: present
+    home: /home/backup
+    shell: /bin/bash
+    generate_ssh_key: true
 
-
+- name: Template backup
+  ansible.builtin.template:
+    src: backup_known_host.j2
+    dest: /home/backup/.ssh/known_hosts
+    owner: backup
+    group: backup
+    mode: '0644'
 
 
 
