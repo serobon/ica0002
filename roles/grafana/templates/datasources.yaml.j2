@@ -7,3 +7,17 @@ datasources:
     uid: fe53z996v9j40a
     url: http://{{ groups['prometheus'][0] }}/prometheus
     editable: false
+  - name: influxdb:agamadb
+    type: influxdb
+    access: proxy
+    uid: de5w7dnxbck5cc
+    url: http://{{ groups['influxdb'][0] }}:8086
+    jsonData:
+      dbName: agamadb
+  - name: influxdb:telegraf
+    type: influxdb
+    access: proxy
+    uid: ae60d96ojirr4d
+    url: http://{{ groups['influxdb'][0] }}:8086
+    jsonData:
+      dbName: telegraf

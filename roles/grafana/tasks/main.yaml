@@ -58,3 +58,8 @@
     dest: /etc/grafana/provisioning/dashboards
     src: main.json
     mode: '0755'
+
+- name: Copy syslog json
+  ansible.builtin.copy:
+    src: syslog.json
+    dest: /etc/grafana/provisioning/dashboards/syslog.json

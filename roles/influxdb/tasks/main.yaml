@@ -1,0 +1,83 @@
+# - name: Install InfluxDB 1.8 deb package
+#   ansible.builtin.get_url: 
+#     url: https://dl.influxdata.com/influxdb/releases/influxdb_1.8.10_amd64.deb 
+#     dest: /home/ubuntu/influxdb
+#     checksum: sha256:b2ace09231575df7309a41cea6f9dc7ad716fe4389dc06ac04470a14bd411456
+
+# - name: Install InfluxDB deb file
+#   ansible.builtin.apt:
+#     deb: /home/ubuntu/influxdb
+#     state: present
+
+# - name: Ensure InfluxDB service is started and enabled
+#   ansible.builtin.service:
+#     name: influxdb
+#     state: started
+#     enabled: yes
+
+- name: Download InfluxDB GPG key
+  ansible.builtin.get_url:
+    url: https://repos.influxdata.com/influxdata-archive_compat.key
+    dest: /etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg
+    mode: '0644'
+
+- name: Add the InfluxDB repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg] https://repos.influxdata.com/debian stable main"
+    state: present
+
+- name: Install InfluxDB
+  ansible.builtin.apt:
+    name: influxdb=1.8.10-1
+    state: present
+
+- name: Ensure InfluxDB service is started and enabled
+  ansible.builtin.service:
+    name: influxdb
+    state: started
+    enabled: yes
+
+- name: Install Telegraf
+  ansible.builtin.apt:
+    name: telegraf
+    state: present
+
+- name: Change Telegraf config
+  ansible.builtin.template:
+    src: telegraf.conf
+    dest: /etc/telegraf/telegraf.conf
+    mode: '0644'
+
+- name: Make sure Telegraf is running
+  ansible.builtin.service:
+    name: telegraf
+    state: started
+    enabled: true
+  notify: Restart telegraf
+
+- name: Install InfluxDB stat exporter from git
+  ansible.builtin.get_url:
+    url: https://github.com/carlpett/influxdb_stats_exporter/releases/download/v0.1.1/influx_stats_exporter_linux_amd64
+    dest: /usr/local/bin/
+    mode: '0500'
+    owner: prometheus
+  notify: Restart systemctl
+
+- name: Template the Influxdb stat exporter service 
+  ansible.builtin.template:
+    src: influxdb_stat_exporter.service
+    dest: /etc/systemd/system/prometheus-influxdb-stats-exporter.service
+    mode: '0644'
+
+- name: Import Influxdb Conf Template
+  ansible.builtin.template:
+    src: influxdb.conf
+    dest: /etc/influxdb/influxdb.conf
+    mode: '0644'
+  notify: Restart influxdb
+
+- name: Make sure Influxdb stat exporter service is running
+  ansible.builtin.service:
+    name: prometheus-influxdb-stats-exporter
+    state: started
+    enabled: true

@@ -25,14 +25,28 @@
     roles:
       - grafana
       
-  - name: Database_Server
+  - name: Database Server
     hosts: db_servers
     roles: 
       - mysql
+
+  - name: InfluxDB
+    hosts: influxdb
+    roles:
+      - influxdb
   
-  - name: Web_Server
-    hosts: web_servers
+  - name: agama server
+    hosts: agama
     roles:
       - agama
+
+  - name: Web server
+    hosts: web_servers
+    roles:
       - uwsgi
       - nginx
+
+  - name: agama client
+    hosts: agama
+    roles:
+      - agama_client
