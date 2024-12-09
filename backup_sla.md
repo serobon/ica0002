@@ -15,7 +15,7 @@ Services that are backed up:
 
 ## Schedule
 
-_____ backups are created every _____; it takes up to _____ to create and store the backup.
+_____ backups are created every day; it takes up to _____ to create and store the backup.
 
 _____ backups are created every _____; it takes up to _____ to create and store the backup.
 

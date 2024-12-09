@@ -1,5 +1,5 @@
-serobon-1 ansible_host=193.40.156.67 ansible_port=3922 ansible_user=ubuntu
-serobon-2 ansible_host=193.40.156.67 ansible_port=13322 ansible_user=ubuntu
+serobon-1 ansible_host=193.40.156.67 ansible_port=13022 ansible_user=ubuntu
+serobon-2 ansible_host=193.40.156.67 ansible_port=12422 ansible_user=ubuntu
 
 [db_servers]
 serobon-2
@@ -21,3 +21,5 @@ serobon-2
 
 [influxdb]
 serobon-2
+
+[mysql_backup_host]

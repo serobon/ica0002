@@ -42,3 +42,9 @@ scrape_configs:
         {% for host in groups['influxdb'] -%}
         - {{ host }}:9424
         {% endfor %}
+
+  - job_name: backup
+    static_configs:
+      - targets: ['backup.swagla.pk:9111']
+        
+

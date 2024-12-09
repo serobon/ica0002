@@ -15,11 +15,11 @@
 #     state: started
 #     enabled: yes
 
-- name: Download InfluxDB GPG key
-  ansible.builtin.get_url:
+- name: Add InfluxDB GPG key using apt_key
+  ansible.builtin.apt_key:
     url: https://repos.influxdata.com/influxdata-archive_compat.key
-    dest: /etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg
-    mode: '0644'
+    state: present
+    keyring: /etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg
 
 - name: Add the InfluxDB repository
   ansible.builtin.apt_repository:
@@ -76,8 +76,25 @@
     mode: '0644'
   notify: Restart influxdb
 
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
 - name: Make sure Influxdb stat exporter service is running
   ansible.builtin.service:
     name: prometheus-influxdb-stats-exporter
     state: started
     enabled: true
+
+- name: Make home/backup/influxdb directory owned by backup
+  ansible.builtin.file:
+    path: /home/backup/influxdb
+    state: directory
+    owner: backup
+    mode: '0755'
+
+- name: Make cron backup for Influx
+  ansible.builtin.template:
+    src: influx_cron.conf
+    dest: /etc/cron.d/influxdb-backup
+    mode: '0600'
+    owner: root

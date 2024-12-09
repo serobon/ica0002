@@ -56,3 +56,30 @@
     login_unix_socket: /var/run/mysqld/mysqld.sock
   no_log: true
   notify: Restart mysql exporter
+
+- name: Make /home/backup/mysql directory owned by backup
+  ansible.builtin.file:
+    path: /home/backup/mysql
+    state: directory
+    owner: backup
+    mode: '0755'
+
+- name: MySQL backup user
+  community.mysql.mysql_user:
+    name: "{{ backup_user }}"
+    password: "{{ backup_password }}"
+    priv: "{{ mysql_database }}.*:LOCK TABLES,SELECT"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  no_log: true
+
+- name: Make Backup Template
+  ansible.builtin.template:
+    src: backup.my.cnf
+    dest: /home/backup/.my.cnf
+  no_log: true
+
+- name: Make cron backup sql dump for MySQL
+  ansible.builtin.template:
+    src: mysql-backup.conf
+    dest: /etc/cron.d/mysql-backup
+    owner: root
