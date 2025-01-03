@@ -29,6 +29,8 @@
     hosts: db_servers
     roles: 
       - mysql
+    tags:
+      - mx
 
   - name: InfluxDB
     hosts: influxdb
@@ -45,6 +47,8 @@
     roles:
       - uwsgi
       - nginx
+    tags:
+      - mx
 
   - name: agama client
     hosts: agama
