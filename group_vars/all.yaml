@@ -20,7 +20,7 @@ networks:
   - 127.0.0.0/8
 
 domain_name: swagla.pk 
-backup_server: backup
+backup_server: backup.swagla.pk
 backup_ip: 192.168.42.132
 backup_server_ssh_key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEu6pFFWyuRrl4WGFPQGElYN9txwTGm2wSntcpVAaN90
 mysql_backup_host: "{{ groups['db_servers'] | reject('eq', mysql_host) | first | default(mysql_host) }}"
@@ -68,3 +68,7 @@ replication_password: !vault |
           3136366166346431396537623634633136663530656632376339
 
 node_id: "{{ (ansible_port / 100) | int }}"
+
+grafana_port: 3001
+agama_port: 8001
+docker_inet: 172.17.0.0/16

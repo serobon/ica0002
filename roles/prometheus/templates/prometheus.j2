@@ -45,6 +45,7 @@ scrape_configs:
 
   - job_name: backup
     static_configs:
-      - targets: ['backup.swagla.pk:9111']
+      - targets: 
+        - {{ backup_server }}:9111
         
 

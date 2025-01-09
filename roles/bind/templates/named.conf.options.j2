@@ -2,6 +2,7 @@ acl allowed_networks {
     {% for n in networks %}
     {{ n }};
     {% endfor %}
+    {{ docker_inet }};
 };
 
 options {

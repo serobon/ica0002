@@ -16,7 +16,7 @@
     src: agama.ini.j2
     owner: agama
     mode: '0600'
-  no_log: true
+  no_log: false
   notify: Restart uwsgi
 
 - name: uWSGI service

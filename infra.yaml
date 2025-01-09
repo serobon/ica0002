@@ -20,6 +20,13 @@
       - prometheus
       - nginx
 
+  - name: docker
+    hosts: docker
+    roles: 
+      - docker
+    tags: 
+      - docker
+
   - name: Grafana
     hosts: grafana
     roles:
@@ -45,7 +52,6 @@
   - name: Web server
     hosts: web_servers
     roles:
-      - uwsgi
       - nginx
     tags:
       - mx
