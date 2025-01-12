@@ -3,22 +3,36 @@
     hosts: all
     roles:
       - init
+    tags:
+      - i
 
   - name: DNS_Servers
     hosts: dns_servers
     roles:
       - bind
+    tags:
+      - dns
       
   - name: Resolver
     hosts: all
     roles:
       - resolver
+    tags:
+      - res
 
   - name: Prometheus
     hosts: prometheus
     roles:
       - prometheus
       - nginx
+
+  - name: keepalived
+    hosts: keepalived
+    roles: 
+      - keepalived
+      - haproxy
+    tags:
+      - ka
 
   - name: docker
     hosts: docker
@@ -43,11 +57,15 @@
     hosts: influxdb
     roles:
       - influxdb
+    tags:
+      - idb
   
   - name: agama server
     hosts: agama
     roles:
       - agama
+    tags: 
+      - ag
 
   - name: Web server
     hosts: web_servers

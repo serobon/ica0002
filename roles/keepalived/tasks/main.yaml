@@ -1,0 +1,59 @@
+- name: Create directory '/etc/keepalived/'
+  ansible.builtin.file:
+    path: /etc/keepalived/
+    state: directory
+
+- name: Install keepalived
+  ansible.builtin.apt:
+    name: keepalived
+    state: present
+
+- name: Create user keepalived
+  ansible.builtin.user:
+    name: keepalived
+    state: present
+
+- name: Template keepalived script
+  ansible.builtin.template:
+    src: keepalived_script.sh
+    dest: /home/keepalived/keepalive.sh 
+    mode: '0744'
+    owner: keepalived
+
+- name: Template keepalived configuration
+  ansible.builtin.template:
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+    mode: '0644'
+  no_log: true
+  notify: Restart keepalived
+
+- name: Start keepalived service
+  ansible.builtin.service:
+    name: keepalived
+    state: started
+    enabled: true
+
+- name: Install keepalived exporter
+  ansible.builtin.get_url:
+    url: https://github.com/mehdy/keepalived-exporter/releases/download/v1.4.0/keepalived-exporter_1.4.0_linux_amd64.tar.gz
+    dest: /home/keepalived/
+  
+- name: Unarchive keepalived exporter
+  ansible.builtin.unarchive:
+    src: /home/keepalived/keepalived-exporter_1.4.0_linux_amd64.tar.gz
+    dest: /usr/local/bin/
+    remote_src: true
+
+- name: Template keepalived service
+  ansible.builtin.template:
+    src: keepalived-exporter.service
+    dest: /etc/systemd/system/
+    mode: '0644'
+  notify: Restart systemctl
+
+- name: Start keepalived service
+  ansible.builtin.service:
+    name: keepalived-exporter
+    state: started
+    enabled: true

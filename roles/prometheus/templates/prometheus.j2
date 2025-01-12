@@ -47,5 +47,19 @@ scrape_configs:
     static_configs:
       - targets: 
         - {{ backup_server }}:9111
+
+  - job_name: keepalived
+    static_configs:
+      - targets:
+        {% for host in groups['keepalived'] -%}
+        - {{ host }}:9165
+        {% endfor %}
+
+  - job_name: haproxy
+    static_configs:
+      - targets:
+        {% for host in groups['keepalived'] -%}
+        - {{ host }}:9101
+        {% endfor %}
         
 

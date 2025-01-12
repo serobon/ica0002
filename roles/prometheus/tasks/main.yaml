@@ -15,7 +15,7 @@
     dest: /etc/default/prometheus
   notify: Restart prometheus
   
-- name: Startup on boot
+- name: Start prometheus service
   ansible.builtin.service:
     name: prometheus
     state: started

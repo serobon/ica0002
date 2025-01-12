@@ -1,5 +1,5 @@
-serobon-1 ansible_host=193.40.156.67 ansible_port=19222 ansible_user=ubuntu
-serobon-2 ansible_host=193.40.156.67 ansible_port=18322 ansible_user=ubuntu
+serobon-1 ansible_host=193.40.156.67 ansible_port=36522 ansible_user=ubuntu
+serobon-2 ansible_host=193.40.156.67 ansible_port=33822 ansible_user=ubuntu
 
 [db_servers]
 serobon-1
@@ -10,6 +10,7 @@ serobon-1
 
 [agama]
 serobon-1
+serobon-2
 
 [dns_servers]
 serobon-2
@@ -24,5 +25,9 @@ serobon-2
 serobon-2
 
 [docker]
+serobon-1
+serobon-2
+
+[keepalived]
 serobon-1
 serobon-2

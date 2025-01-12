@@ -1,0 +1,41 @@
+global_defs {
+    enable_script_security
+    script_user keepalived
+}
+
+vrrp_script check_haproxy {                 
+    script "/home/keepalived/keepalive.sh" 
+    weight 20                              
+    interval 1               
+}
+vrrp_instance {{ domain_name }} {             
+    interface ens3
+    virtual_router_id 52
+    {% if inventory_hostname == groups['web_servers'][0] %}
+    priority 100
+    {% else %}
+    priority 90
+    {% endif %}
+    advert_int 1
+
+    authentication {
+        auth_type PASS
+        auth_pass "{{ keepalived_password }}"
+    }
+
+    virtual_ipaddress {                     
+        192.168.{{ hostvars['serobon-1']['ansible_default_ipv4']['address'].split('.')[-2] | int + 58 }}.{{ hostvars['serobon-1']['ansible_default_ipv4']['address'].split('.')[-1] }}/24
+    }
+
+    unicast_peer {                          
+        {% for vm in groups['docker'] %}
+            {% if inventory_hostname != vm %}
+                {{ hostvars[vm]['ansible_default_ipv4']['address'] }}
+            {% endif %}
+        {% endfor %}    
+    }
+
+    track_script {
+        check_haproxy
+    }
+}

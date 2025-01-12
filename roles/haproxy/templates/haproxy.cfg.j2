@@ -1,0 +1,33 @@
+global
+    maxconn 50000
+    log /dev/log local0
+    user haproxy
+    group haproxy
+    stats socket /run/haproxy/admin.sock user haproxy group haproxy mode 660 level admin
+    ssl-default-bind-ciphers ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256
+    ssl-default-bind-options ssl-min-ver TLSv1.2 no-tls-tickets
+
+defaults
+    timeout connect 10s
+    timeout client 30s
+    timeout server 30s
+    log global
+    mode http
+    option httplog
+    maxconn 3000
+
+frontend my_ha_frontend
+    bind :88
+    default_backend my_ha_backend
+
+backend my_ha_backend
+    {% for num in range(1, container_amount + 1) %}
+    server vm1-agama-{{ num }} serobon-1:{{ 8001 + num - 1}} check
+    server vm2-agama-{{ num }} serobon-2:{{ 8001 + num - 1}} check
+    {% endfor %}
+
+listen stats
+    bind *:9188
+    stats enable
+    stats uri /monitor
+    stats refresh 5s

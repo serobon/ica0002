@@ -21,12 +21,29 @@
     build:
       path: /opt/agama
     
-- name: Start agama data container
+- name: Start agama data containers on VM1
   community.docker.docker_container:
-    name: agama
+    name: vm1-agama-{{ item }}
     image: agama
     volumes: /opt/agama:/opt/agama
     env: AGAMA_DATABASE_URI=mysql+pymysql://{{ mysql_user }}:{{ mysql_password }}@{{ mysql_host }}/{{ mysql_database }}
-    published_ports: "{{ agama_port }}:8000"
+    ports: 
+      - "{{ agama_port + item - 1}}:8000"
     state: started
-  no_log: true
+    restart_policy: always
+  loop: "{{ range(1, container_amount + 1) | list }}"
+  when: "inventory_hostname == 'serobon-1'"
+
+
+- name: Start agama data containers on VM2
+  community.docker.docker_container:
+    name: vm2-agama-{{ item }}
+    image: agama
+    volumes: /opt/agama:/opt/agama
+    env: AGAMA_DATABASE_URI=mysql+pymysql://{{ mysql_user }}:{{ mysql_password }}@{{ mysql_host }}/{{ mysql_database }}
+    ports: 
+      - "{{ agama_port + item - 1}}:8000"
+    state: started
+    restart_policy: always
+  loop: "{{ range(1, container_amount + 1) | list }}"
+  when: "inventory_hostname == 'serobon-2'"
