@@ -26,7 +26,7 @@
     name: vm1-agama-{{ item }}
     image: agama
     volumes: /opt/agama:/opt/agama
-    env: AGAMA_DATABASE_URI=mysql+pymysql://{{ mysql_user }}:{{ mysql_password }}@{{ mysql_host }}/{{ mysql_database }}
+    env: AGAMA_DATABASE_URI=mysql+pymysql://{{ mysql_user }}:{{ mysql_password }}@db{{ mysql_host | replace ('serobon','') }}/{{ mysql_database }}
     ports: 
       - "{{ agama_port + item - 1}}:8000"
     state: started
@@ -40,7 +40,7 @@
     name: vm2-agama-{{ item }}
     image: agama
     volumes: /opt/agama:/opt/agama
-    env: AGAMA_DATABASE_URI=mysql+pymysql://{{ mysql_user }}:{{ mysql_password }}@{{ mysql_host }}/{{ mysql_database }}
+    env: AGAMA_DATABASE_URI=mysql+pymysql://{{ mysql_user }}:{{ mysql_password }}@db{{ mysql_host | replace ('serobon','') }}/{{ mysql_database }}
     ports: 
       - "{{ agama_port + item - 1}}:8000"
     state: started

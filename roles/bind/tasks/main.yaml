@@ -49,17 +49,55 @@
     - options
   notify: Restart bind9
 
-- name: Create database config
+- name: Template database zone config
   ansible.builtin.template:
     dest: /var/cache/bind/db.{{ domain_name }}
     src: db.{{ domain_name }}.j2
+    force: no
     mode: '0644'
-  notify: Restart bind9
+  notify: Reload bind9
+  when: inventory_hostname in groups ['dns_primary']
 
-- name: Startup on boot
+
+- name: Template reverse zone config
+  ansible.builtin.template:
+    dest: /var/cache/bind/rev.db.{{ domain_name }}
+    src: rev.db.{{ domain_name }}.j2
+    force: yes
+  notify: Reload bind9
+  when: inventory_hostname in groups ['dns_primary']
+
+- name: Install python3-dnspython as a nsupdate dependency
+  ansible.builtin.apt:
+    name: python3-dnspython
+    state: present
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Create A record for backup server
+  community.general.nsupdate:
+    key_algorithm: "hmac-sha256"
+    key_name: "nsupdate.key"
+    key_secret: "{{ nsupdate_key }}"
+    record: "{{ backup_user }}"
+    server: "{{hostvars[groups['dns_primary'][0]]['ansible_default_ipv4']['address']}}"
+    state: present
+    type: A
+    zone: "{{ domain_name }}"
+    value: "{{ backup_ip }}"
+  when: inventory_hostname in groups['dns_primary']
+
+- name: Start bind9
   ansible.builtin.service:
     name: "{{ item }}"
     state: started
     enabled: true
   loop:
     - bind9
+
+- name: Assign cnames
+  include_role:
+    name: "cname"
+  vars:
+    service: "ns{{inventory_hostname | replace('serobon','')}}"

@@ -25,3 +25,9 @@
   loop:
     - nginx
     - prometheus-nginx-exporter
+
+- name: Assign cnames
+  include_role:
+    name: "cname"
+  vars:
+    service: "www{{inventory_hostname | replace('serobon','')}}"

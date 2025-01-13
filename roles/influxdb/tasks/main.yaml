@@ -98,3 +98,9 @@
     dest: /etc/cron.d/influxdb-backup
     mode: '0600'
     owner: root
+
+- name: Assign cnames
+  include_role:
+    name: "cname"
+  vars:
+    service: "influxdb"

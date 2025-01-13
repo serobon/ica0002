@@ -31,27 +31,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 1,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -82,32 +61,28 @@
         ]
       },
       "gridPos": {
-        "h": 12,
+        "h": 5,
         "w": 5,
         "x": 0,
         "y": 0
       },
       "id": 9,
       "options": {
-        "barRadius": 0,
-        "barWidth": 1,
-        "fullHighlight": false,
-        "groupWidth": 0.7,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "right",
-          "showLegend": false
-        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
         "orientation": "horizontal",
-        "showValue": "auto",
-        "stacking": "none",
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 0
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
       "pluginVersion": "11.4.0",
       "targets": [
@@ -128,10 +103,10 @@
           "measurement": "agama-stats",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT * FROM \"agama-stats\" GROUP BY \"name\"",
-          "rawQuery": false,
+          "query": "SELECT sum(\"items\") FROM \"autogen\".\"agama-stats\" WHERE $timeFilter GROUP BY time(1m) fill(null)",
+          "rawQuery": true,
           "refId": "A",
-          "resultFormat": "table",
+          "resultFormat": "time_series",
           "select": [
             [
               {
@@ -150,7 +125,7 @@
         }
       ],
       "title": "Agama Items",
-      "type": "barchart"
+      "type": "stat"
     },
     {
       "datasource": {
@@ -235,6 +210,7 @@
       "targets": [
         {
           "editorMode": "code",
+          "exemplar": false,
           "expr": "rate(bind_resolver_queries_total{type=\"A\"}[1m])",
           "legendFormat": "Queries",
           "range": true,
@@ -284,7 +260,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
+        "w": 4,
         "x": 10,
         "y": 0
       },
@@ -311,7 +287,7 @@
         {
           "editorMode": "code",
           "expr": "up{job=\"bind9\"}",
-          "legendFormat": "{{job}}",
+          "legendFormat": "{{instance}}",
           "range": true,
           "refId": "A"
         }
@@ -360,7 +336,7 @@
       "gridPos": {
         "h": 3,
         "w": 4,
-        "x": 12,
+        "x": 14,
         "y": 0
       },
       "id": 13,
@@ -639,6 +615,116 @@
     },
     {
       "datasource": {
+        "type": "influxdb",
+        "uid": "de5w7dnxbck5cc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "items"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": []
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 0,
+        "y": 5
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "de5w7dnxbck5cc"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "name::tag"
+              ],
+              "type": "tag"
+            }
+          ],
+          "measurement": "agama-stats",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT distinct(\"items\") FROM \"agama-stats\" WHERE $timeFilter GROUP BY \"name::'serobon-2.agamadb'\"",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "items"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "distinct"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Items in my Agama",
+      "type": "stat"
+    },
+    {
+      "datasource": {
         "type": "prometheus",
         "uid": "fe53z996v9j40a"
       },
@@ -797,7 +883,7 @@
         {
           "editorMode": "code",
           "expr": "up{job=\"nginx\"}",
-          "legendFormat": "{{job}}",
+          "legendFormat": "{{instance}}",
           "range": true,
           "refId": "A"
         }
@@ -814,7 +900,23 @@
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "1": {
+                  "color": "yellow",
+                  "index": 0,
+                  "text": "Backup"
+                },
+                "2": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "Master"
+                }
+              },
+              "type": "value"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1024,7 +1126,7 @@
         {
           "editorMode": "code",
           "expr": "influxdb_exporter_stats_query_success",
-          "legendFormat": "{{job}}",
+          "legendFormat": "{{instance}}",
           "range": true,
           "refId": "A"
         }
@@ -1098,129 +1200,13 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "haproxy_server_up{instance=\"serobon-2:9101\"}",
+          "expr": "haproxy_server_up{instance=\"lb-2:9101\"}",
           "legendFormat": "{{server}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Haproxy Server",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "de5w7dnxbck5cc"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "items"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": []
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 0,
-        "y": 12
-      },
-      "id": 10,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "11.4.0",
-      "targets": [
-        {
-          "alias": "",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "de5w7dnxbck5cc"
-          },
-          "groupBy": [
-            {
-              "params": [
-                "name::tag"
-              ],
-              "type": "tag"
-            }
-          ],
-          "measurement": "agama-stats",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT * FROM \"agama-stats\" GROUP BY \"name\"",
-          "rawQuery": false,
-          "refId": "A",
-          "resultFormat": "table",
-          "select": [
-            [
-              {
-                "params": [
-                  "items"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "distinct"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "name::tag",
-              "operator": "=",
-              "value": "5dee19d28329"
-            }
-          ]
-        }
-      ],
-      "title": "Items in my Agama",
+      "title": "VM2 Haproxy Server Status ",
       "type": "stat"
     },
     {
@@ -1350,6 +1336,81 @@
       ],
       "title": "CPU utilization",
       "type": "gauge"
+    },
+    {
+      "datasource": {
+        "uid": "fe53z996v9j40a"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "DOWN"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "UP"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 12,
+        "y": 13
+      },
+      "id": 17,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "haproxy_server_up{instance=\"lb-1:9101\"}",
+          "legendFormat": "{{server}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "VM1 Haproxy Server Status ",
+      "type": "stat"
     }
   ],
   "preload": false,

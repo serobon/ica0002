@@ -19,29 +19,27 @@ scrape_configs:
     static_configs:
       - targets:
         {% for host in groups['db_servers'] -%}
-        - {{ host }}:9104
+        - db{{ host | replace ('serobon','') }}:9104
         {% endfor %}
 
   - job_name: bind9
     static_configs:
       - targets:
         {% for host in groups['dns_servers'] -%}
-        - {{ host }}:9119
+        - ns{{ host | replace ('serobon','') }}:9119
         {% endfor %}
 
   - job_name: nginx
     static_configs:
       - targets:
         {% for host in groups['web_servers'] -%}
-        - {{ host }}:9113
+        - www{{ host | replace ('serobon','') }}:9113
         {% endfor %}
 
   - job_name: influxdb exporter
     static_configs:
       - targets:
-        {% for host in groups['influxdb'] -%}
-        - {{ host }}:9424
-        {% endfor %}
+        - influxdb:9424
 
   - job_name: backup
     static_configs:
@@ -59,7 +57,7 @@ scrape_configs:
     static_configs:
       - targets:
         {% for host in groups['keepalived'] -%}
-        - {{ host }}:9101
+        - lb{{ host | replace ('serobon','') }}:9101
         {% endfor %}
         
 

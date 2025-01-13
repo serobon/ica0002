@@ -1,5 +1,5 @@
-serobon-1 ansible_host=193.40.156.67 ansible_port=36522 ansible_user=ubuntu
-serobon-2 ansible_host=193.40.156.67 ansible_port=33822 ansible_user=ubuntu
+serobon-1 ansible_host=193.40.156.67 ansible_port=6522 ansible_user=ubuntu
+serobon-2 ansible_host=193.40.156.67 ansible_port=8022 ansible_user=ubuntu
 
 [db_servers]
 serobon-1
@@ -12,8 +12,15 @@ serobon-1
 serobon-1
 serobon-2
 
-[dns_servers]
+[dns_servers:children]
+dns_primary
+dns_secondary
+
+[dns_primary]
 serobon-2
+
+[dns_secondary]
+serobon-1
 
 [prometheus]
 serobon-2

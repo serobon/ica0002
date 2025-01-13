@@ -50,3 +50,9 @@
     state: started
     published_ports: "{{ grafana_port }}:3000"
   notify: Restart container
+
+- name: Assign cnames
+  include_role:
+    name: "cname"
+  vars:
+    service: "grafana"
