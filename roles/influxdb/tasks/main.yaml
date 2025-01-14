@@ -85,18 +85,18 @@
     state: started
     enabled: true
 
-- name: Make home/backup/influxdb directory owned by backup
+- name: Make /home/backup/influxdb directory owned by backup
   ansible.builtin.file:
     path: /home/backup/influxdb
     state: directory
     owner: backup
+    group: backup
     mode: '0755'
 
 - name: Make cron backup for Influx
   ansible.builtin.template:
     src: influx_cron.conf
     dest: /etc/cron.d/influxdb-backup
-    mode: '0600'
     owner: root
 
 - name: Assign cnames

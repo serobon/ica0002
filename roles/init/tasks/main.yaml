@@ -7,7 +7,7 @@
     name: prometheus-node-exporter
     state: present
     
-- name: Move rsyslog template
+- name: Template rsyslog config
   ansible.builtin.template:
     src: rsyslog.conf
     dest: /etc/rsyslog.d/50-telegraf.conf
@@ -28,13 +28,14 @@
     dest: /home/backup/.ssh/known_hosts
     owner: backup
     group: backup
-    mode: '0644'
-
-- name: Make home/backup/restore directory owned by backup
+    mode: '0600'
+ 
+- name: Make /home/backup/restore directory owned by backup
   ansible.builtin.file:
     path: /home/backup/restore
     state: directory
     owner: backup
+    group: backup
     mode: '0744'
 
 - name: Install duplicity

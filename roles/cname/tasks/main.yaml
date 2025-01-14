@@ -1,4 +1,9 @@
-- name: Applies cnames
+- name: Install dependency for nsupdate
+  ansible.builtin.apt:
+    name: python3-dnspython
+    state: present
+
+- name: Adds CNAME DNS record
   community.general.nsupdate:
     key_algorithm: "hmac-sha256"
     key_name: "nsupdate.key"
@@ -9,3 +14,4 @@
     type: CNAME
     zone: "{{ domain_name }}"
     value: "{{ inventory_hostname }}"
+  no_log: true

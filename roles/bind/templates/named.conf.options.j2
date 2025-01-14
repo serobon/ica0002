@@ -17,7 +17,8 @@ options {
     allow-query { allowed_networks; };
 
     dnssec-validation no;
-
+    recursion yes;
+    empty-zones-enable yes;
 };
 
 statistics-channels {

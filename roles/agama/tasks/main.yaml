@@ -33,6 +33,7 @@
     restart_policy: always
   loop: "{{ range(1, container_amount + 1) | list }}"
   when: "inventory_hostname == 'serobon-1'"
+  no_log: true
 
 
 - name: Start agama data containers on VM2
@@ -47,3 +48,4 @@
     restart_policy: always
   loop: "{{ range(1, container_amount + 1) | list }}"
   when: "inventory_hostname == 'serobon-2'"
+  no_log: true

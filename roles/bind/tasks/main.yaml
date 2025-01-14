@@ -29,7 +29,6 @@
       [Service]
       User=bind
       Group=bind
-      Type=simple
       ExecStart=/usr/local/bin/prometheus-bind-exporter
       Restart=always
 
@@ -39,6 +38,15 @@
     - Reload systemd
     - Restart bind9-exporter
 
+- name: Start bind9
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  loop:
+    - named
+    - bind_exporter
+
 - name: Create bind9 config
   ansible.builtin.template:
     dest: /etc/bind/named.conf.{{ item }}
@@ -47,7 +55,9 @@
   loop:
     - local
     - options
-  notify: Restart bind9
+  notify: 
+    - Restart bind9
+    - Restart bind9-exporter
 
 - name: Template database zone config
   ansible.builtin.template:
@@ -57,7 +67,6 @@
     mode: '0644'
   notify: Reload bind9
   when: inventory_hostname in groups ['dns_primary']
-
 
 - name: Template reverse zone config
   ansible.builtin.template:
@@ -80,21 +89,13 @@
     key_algorithm: "hmac-sha256"
     key_name: "nsupdate.key"
     key_secret: "{{ nsupdate_key }}"
-    record: "{{ backup_user }}"
+    record: "backup.{{ domain_name }}"
     server: "{{hostvars[groups['dns_primary'][0]]['ansible_default_ipv4']['address']}}"
     state: present
     type: A
     zone: "{{ domain_name }}"
     value: "{{ backup_ip }}"
   when: inventory_hostname in groups['dns_primary']
-
-- name: Start bind9
-  ansible.builtin.service:
-    name: "{{ item }}"
-    state: started
-    enabled: true
-  loop:
-    - bind9
 
 - name: Assign cnames
   include_role:

@@ -1,5 +1,6 @@
-serobon-1 ansible_host=193.40.156.67 ansible_port=6522 ansible_user=ubuntu
-serobon-2 ansible_host=193.40.156.67 ansible_port=8022 ansible_user=ubuntu
+serobon-1 ansible_host=193.40.156.67 ansible_port=38822 ansible_user=ubuntu
+serobon-2 ansible_host=193.40.156.67 ansible_port=31322 ansible_user=ubuntu
+serobon-3 ansible_host=193.40.156.67 ansible_port=32222 ansible_user=ubuntu
 
 [db_servers]
 serobon-1
@@ -7,33 +8,40 @@ serobon-2
 
 [web_servers]
 serobon-1
+serobon-2
+serobon-3
 
 [agama]
 serobon-1
 serobon-2
+
+[agama_client]
+serobon-3
 
 [dns_servers:children]
 dns_primary
 dns_secondary
 
 [dns_primary]
-serobon-2
+serobon-3
 
 [dns_secondary]
 serobon-1
+serobon-2
 
 [prometheus]
-serobon-2
+serobon-3
 
 [grafana]
-serobon-2
+serobon-3
 
 [influxdb]
-serobon-2
+serobon-3
 
 [docker]
 serobon-1
 serobon-2
+serobon-3
 
 [keepalived]
 serobon-1

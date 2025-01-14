@@ -1,5 +1,4 @@
 {% if inventory_hostname == mysql_backup_host %}
-45 15 * * * backup mysqldump agama > /home/backup/mysql/agama.sql
-50 15 * * 0  backup duplicity --no-encryption full /home/backup/mysql/ rsync://serobon@backup.swagla.pk/mysql
-50 15 * * 1-6 backup duplicity --no-encryption incremental /home/backup/mysql/ rsync://serobon@backup.swagla.pk/mysql
+50 21 * * * backup mysqldump agama > /home/backup/mysql/agama.sql
+00 22 * * * backup duplicity --no-encryption full /home/backup/mysql/ rsync://serobon@backup/mysql
 {% endif %}

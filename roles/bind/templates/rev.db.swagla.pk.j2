@@ -7,7 +7,7 @@ $TTL	604800
 			 604800 )	; Negative Cache TTL
 ;
 {% for host in groups['dns_servers'] %}
-168.192.in-addr.arpa. IN NS {{ host }}
+168.192.in-addr.arpa. IN NS {{ host }}.{{ domain_name }}.
 {% endfor %}
 ; PTR RECORDS
 {% for host in groups['all'] %}

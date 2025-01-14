@@ -24,9 +24,10 @@
     hosts: prometheus
     roles:
       - prometheus
-      - nginx
+    tags:
+      - prom
 
-  - name: keepalived
+  - name: Keepalived
     hosts: keepalived
     roles: 
       - keepalived
@@ -34,7 +35,7 @@
     tags:
       - ka
 
-  - name: docker
+  - name: Docker
     hosts: docker
     roles: 
       - docker
@@ -45,6 +46,8 @@
     hosts: grafana
     roles:
       - grafana
+    tags:
+      - graf
       
   - name: Database Server
     hosts: db_servers
@@ -60,12 +63,13 @@
     tags:
       - idb
   
-  - name: agama server
+  - name: Agama server
     hosts: agama
     roles:
       - agama
     tags: 
       - ag
+      - mx
 
   - name: Web server
     hosts: web_servers
@@ -74,7 +78,9 @@
     tags:
       - mx
 
-  - name: agama client
-    hosts: agama
+  - name: Agama client
+    hosts: agama_client
     roles:
       - agama_client
+    tags: 
+      - agc
