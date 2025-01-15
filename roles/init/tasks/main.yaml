@@ -29,6 +29,7 @@
     owner: backup
     group: backup
     mode: '0600'
+  no_log: true
  
 - name: Make /home/backup/restore directory owned by backup
   ansible.builtin.file:

@@ -82,6 +82,7 @@
     mode: '0400'
   notify:
     - Restart mysql exporter
+  no_log: true
 
 - name: Add mysql backup config
   ansible.builtin.template:
@@ -91,6 +92,7 @@
     group: backup
     mode: '0600'
   notify: Restart mysql
+  no_log: true
 
 - name: Set dynamic mysql parameters
   community.mysql.mysql_variables:
