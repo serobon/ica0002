@@ -50,7 +50,7 @@
 
 - name: Reload systemd to recognize new service
   ansible.builtin.systemd:
-    daemon_reload: yes
+    daemon_reload: true
 
 - name: Ensure agama-client service is started and enabled
   ansible.builtin.service:
