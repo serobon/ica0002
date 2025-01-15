@@ -58,6 +58,7 @@
   notify: 
     - Restart bind9
     - Restart bind9-exporter
+  no_log: true
   
 
 - name: Template database zone config

@@ -13,6 +13,7 @@
     src: override.cnf.j2
     dest: /etc/mysql/mysql.conf.d/override.cnf
   notify: Restart mysql
+  
 
 - name: Install python3-pymysql
   ansible.builtin.apt:
@@ -116,8 +117,8 @@
     dest: /var/lib/prometheus/.my.cnf
     owner: prometheus
     mode: '0400'
-  no_log: true
   notify: Restart mysql exporter
+  no_log: true
 
 - name: MySQL exporter service
   ansible.builtin.service:
