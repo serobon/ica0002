@@ -58,6 +58,7 @@
   notify: 
     - Restart bind9
     - Restart bind9-exporter
+  
 
 - name: Template database zone config
   ansible.builtin.template:
@@ -96,6 +97,7 @@
     zone: "{{ domain_name }}"
     value: "{{ backup_ip }}"
   when: inventory_hostname in groups['dns_primary']
+  no_log: true
 
 - name: Assign cnames
   include_role:

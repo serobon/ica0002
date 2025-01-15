@@ -26,12 +26,13 @@
     state: started
     enabled: yes
 
-- name: Run grafana template
+- name: Template grafana config
   ansible.builtin.template:
     src: grafana.ini.j2
     dest: /etc/grafana/grafana.ini
     mode: '0644'
   notify: Restart grafana
+  no_log: true
 
 - name: Run grafana dashboard template
   ansible.builtin.template:
