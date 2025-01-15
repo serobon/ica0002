@@ -27,6 +27,28 @@
     tags:
       - prom
 
+  - name: Grafana
+    hosts: grafana
+    roles:
+      - docker
+      - grafana
+    tags:
+      - graf
+
+  - name: Database Server
+    hosts: db_servers
+    roles: 
+      - mysql
+    tags:
+      - mx
+
+  - name: InfluxDB
+    hosts: influxdb
+    roles:
+      - influxdb
+    tags:
+      - idb
+
   - name: Keepalived
     hosts: keepalived
     roles: 
@@ -42,27 +64,6 @@
     tags: 
       - docker
 
-  - name: Grafana
-    hosts: grafana
-    roles:
-      - grafana
-    tags:
-      - graf
-      
-  - name: Database Server
-    hosts: db_servers
-    roles: 
-      - mysql
-    tags:
-      - mx
-
-  - name: InfluxDB
-    hosts: influxdb
-    roles:
-      - influxdb
-    tags:
-      - idb
-  
   - name: Agama server
     hosts: agama
     roles:

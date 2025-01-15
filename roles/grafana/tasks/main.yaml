@@ -48,6 +48,7 @@
     image: grafana/grafana
     volumes: /opt/grafana:/etc/grafana
     state: started
+    restart_policy: always
     published_ports: "{{ grafana_port }}:3000"
   notify: Restart container
 

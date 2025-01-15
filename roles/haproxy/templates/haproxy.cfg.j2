@@ -27,7 +27,7 @@ backend my_ha_backend
     {% endfor %}
 
 listen stats
-    bind *:9188
+    bind :9188
     stats enable
-    stats uri /monitor
+    stats uri /stats
     stats refresh 5s

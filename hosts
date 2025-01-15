@@ -1,6 +1,6 @@
-serobon-1 ansible_host=193.40.156.67 ansible_port=38822 ansible_user=ubuntu
-serobon-2 ansible_host=193.40.156.67 ansible_port=31322 ansible_user=ubuntu
-serobon-3 ansible_host=193.40.156.67 ansible_port=32222 ansible_user=ubuntu
+serobon-1 ansible_host=193.40.156.67 ansible_port=4922 ansible_user=ubuntu
+serobon-2 ansible_host=193.40.156.67 ansible_port=2022 ansible_user=ubuntu
+serobon-3 ansible_host=193.40.156.67 ansible_port=10722 ansible_user=ubuntu
 
 [db_servers]
 serobon-1
