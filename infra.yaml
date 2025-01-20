@@ -27,6 +27,21 @@
     tags:
       - prom
 
+  - name: Keepalived
+    hosts: keepalived
+    roles: 
+      - keepalived
+      - haproxy
+    tags:
+      - ka
+
+  - name: Docker
+    hosts: docker
+    roles: 
+      - docker
+    tags: 
+      - docker
+
   - name: Grafana
     hosts: grafana
     roles:
@@ -48,21 +63,6 @@
       - influxdb
     tags:
       - idb
-
-  - name: Keepalived
-    hosts: keepalived
-    roles: 
-      - keepalived
-      - haproxy
-    tags:
-      - ka
-
-  - name: Docker
-    hosts: docker
-    roles: 
-      - docker
-    tags: 
-      - docker
 
   - name: Agama server
     hosts: agama
