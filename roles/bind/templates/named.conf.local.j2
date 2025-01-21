@@ -1,8 +1,8 @@
 zone "{{ domain_name }}" {
     {% if inventory_hostname in groups['dns_primary'] %}
         type primary;
-        allow-transfer {key transfer.key;};
-        allow-update {key nsupdate.key;};
+        allow-transfer {key transferkey;};
+        allow-update {key nsupdatekey;};
         file "/var/cache/bind/db.{{ domain_name }}";
     {% else %}
         type secondary;
@@ -18,7 +18,7 @@ zone "{{ domain_name }}" {
 {% if inventory_hostname in groups ['dns_secondary'] %}
     {% for primary in groups['dns_primary'] %}
         server {{hostvars[primary]['ansible_default_ipv4']['address'] }} {
-            keys {transfer.key;};
+            keys {transferkey;};
         };
     {% endfor %}
 {% endif %}
@@ -26,8 +26,8 @@ zone "{{ domain_name }}" {
 zone "168.192.in-addr.arpa" {
     {% if inventory_hostname in groups['dns_primary'] %}
         type primary;
-        allow-transfer {key transfer.key;};
-        allow-update {key nsupdate.key;};
+        allow-transfer {key transferkey;};
+        allow-update {key nsupdatekey;};
         file "/var/cache/bind/rev.db.{{ domain_name }}";
     {% else %}
         type secondary;
