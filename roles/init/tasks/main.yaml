@@ -6,6 +6,12 @@
   ansible.builtin.apt:
     name: prometheus-node-exporter
     state: present
+
+- name: Start Prometheus node exporter
+  ansible.builtin.service:
+    name: prometheus-node-exporter
+    state: started
+    enabled: yes
     
 - name: Template rsyslog config
   ansible.builtin.template:

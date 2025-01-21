@@ -26,6 +26,12 @@
     owner: root
   notify: Restart mysql
 
+- name: Start and enable MySQL service
+  ansible.builtin.service:
+    name: mysql
+    state: started
+    enabled: yes
+
 - name: MySQL database
   community.mysql.mysql_db:
     name: "{{ mysql_database }}"
@@ -74,15 +80,15 @@
     login_unix_socket: /var/run/mysqld/mysqld.sock
   no_log: true
 
-- name: Add mysql exporter config
-  ansible.builtin.template:
-    src: .my.cnf.j2
-    dest: /var/lib/prometheus/.my.cnf
-    owner: prometheus
-    mode: '0400'
-  notify:
-    - Restart mysql exporter
-  no_log: true
+# - name: Add mysql exporter config
+#   ansible.builtin.template:
+#     src: .my.cnf.j2
+#     dest: /var/lib/prometheus/.my.cnf
+#     owner: prometheus
+#     mode: '0400'
+#   notify:
+#     - Restart mysql exporter
+#   no_log: true
 
 - name: Add mysql backup config
   ansible.builtin.template:
@@ -90,8 +96,7 @@
     dest: /home/backup/.my.cnf
     owner: backup
     group: backup
-    mode: '0600'
-  notify: Restart mysql
+    mode: '0600'-
   no_log: true
 
 - name: Set dynamic mysql parameters
@@ -104,11 +109,11 @@
     - Reset mysql source
     - Reset mysql replica
 
-- name: Start and enable MySQL service
-  ansible.builtin.service:
-    name: mysql
-    state: started
-    enabled: yes
+# - name: Start and enable MySQL service
+#   ansible.builtin.service:
+#     name: mysql
+#     state: started
+#     enabled: yes
 
 - name: Replace default .my.cnf
   ansible.builtin.template:
