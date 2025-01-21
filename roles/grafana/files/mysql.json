@@ -257,7 +257,7 @@
         {
           "editorMode": "code",
           "expr": "mysql_slave_status_slave_sql_running",
-          "legendFormat": "",
+          "legendFormat": "{{instance}}",
           "range": true,
           "refId": "A"
         }
@@ -499,7 +499,7 @@
         {
           "editorMode": "code",
           "expr": "mysql_slave_status_slave_io_running",
-          "legendFormat": "__auto",
+          "legendFormat": "{{instance}}",
           "range": true,
           "refId": "A"
         }
@@ -523,6 +523,6 @@
   "timezone": "browser",
   "title": "MySQL",
   "uid": "be7s4wkp2jzeoa",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }

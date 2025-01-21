@@ -4,3 +4,8 @@
       - docker.io
       - python3-docker
     state: present
+
+- name: Log into DockerHub
+  community.docker.docker_login:
+    username: serobondocker
+    password: "{{ docker_password }}"

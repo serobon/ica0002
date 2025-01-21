@@ -59,5 +59,3 @@ scrape_configs:
         {% for host in groups['keepalived'] -%}
         - lb{{ host | replace ('serobon','') }}:9101
         {% endfor %}
-        
-

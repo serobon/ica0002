@@ -5,7 +5,6 @@
       - init
     tags:
       - i
-      - mx
 
   - name: DNS_Servers
     hosts: dns_servers
@@ -13,6 +12,7 @@
       - bind
     tags:
       - dns
+      - mx
       
   - name: Resolver
     hosts: all
