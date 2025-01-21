@@ -50,7 +50,7 @@ scrape_configs:
     static_configs:
       - targets:
         {% for host in groups['keepalived'] -%}
-        - {{ host }}:9165
+        - lb{{ host | replace ('serobon','') }}:9165
         {% endfor %}
 
   - job_name: haproxy
