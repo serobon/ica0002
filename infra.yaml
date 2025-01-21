@@ -5,6 +5,7 @@
       - init
     tags:
       - i
+      - mx
 
   - name: DNS_Servers
     hosts: dns_servers

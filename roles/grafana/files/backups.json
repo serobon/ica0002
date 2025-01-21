@@ -291,6 +291,7 @@
     }
   ],
   "preload": false,
+  "refresh": "5m",
   "schemaVersion": 40,
   "tags": [],
   "templating": {
