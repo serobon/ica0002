@@ -1,3 +1,6 @@
-# ica0002
+# Highly Available Infrastructure with real-time service statistics 
 
-Ansible thing that deploys a thing
+Featuring:
+- Prometheus, InfluxDB, Grafana
+- Bind9, HAproxy, KeepAlived
+- Docker, Nginx
